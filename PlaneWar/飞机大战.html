@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{margin:0;padding:0;}
+			
+			/*大盒子*/
+			.box{
+				width:480px;
+				height:755px;
+				background:url(img/bg.jpg) repeat-y;
+				margin:0 auto;
+				position:relative;
+				overflow: hidden;
+				background-position:0px 10px;
+			}
+			/*我方飞机*/
+			.me{
+				width:100px;
+				height:130px;
+				bottom:19px;
+				left:205px;
+				position:absolute;
+				background:url(img/me.png) no-repeat center center;
+			}
+			/*子弹*/
+			.bullet{
+				width:10px;
+				height:20px;
+				position:absolute;
+				background:url(img/bullet.png) no-repeat center center;
+			}
+			.logo{
+				position:absolute;
+				top:160px;
+				left:30px;
+			}
+			.start{
+				width:230px;
+				height:60px;
+				border:3px solid #4F5150;
+				font-size:30px;
+				font-weight: bold;
+				text-align: center;
+				line-height: 60px;
+				border-radius: 30px;
+				background:transparent;
+				position:absolute;
+				left:130px;
+				bottom:160px;
+			}
+			.start:hover{
+				cursor:pointer;
+			}
+			/*过场飞机*/
+			.load-plane{
+				position:absolute;
+				left:-50px;
+			}	
+			/*敌机*/
+			.enemy{
+				width:50px;
+				height:35px;
+				position:absolute;
+				top:10px;
+				background:url(img/plane1.png) no-repeat center center;
+			}
+		</style>		
+	</head>
+	<body>
+		<div class="box">
+			<div class="loading-entrance">
+				<!--logo-->
+				<img src="img/logo.png" class="logo"/>
+				<!--开始游戏按钮-->
+				<div class="start">开始游戏</div>
+			</div>
+			<div class="me"></div>
+		</div>
+	</body>
+		<script src="js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+		<!--初始动画小飞机类-->
+		<script src="js/TinyPlane.js" type="text/javascript" charset="utf-8"></script>
+		<!--我方飞机类-->
+		<script src="js/MyPlane.js" type="text/javascript" charset="utf-8"></script>
+		<!--子弹类-->
+		<script src="js/Bullet.js" type="text/javascript" charset="utf-8"></script>	
+		<!--敌机类-->
+		<script src="js/Enemy.js" type="text/javascript" charset="utf-8"></script>	
+</html>
