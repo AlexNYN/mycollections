@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Alex's ToDoList</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<!--Jquery-->
+		<script src="libs/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+		<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<!--Vue.js-->
+		<script src="http://apps.bdimg.com/libs/vue/1.0.14/vue.js"></script>
+		<script src="https://cdn.bootcss.com/vue-resource/1.3.3/vue-resource.js"></script>
+	</head>
+	<body>
+		<div class="container">	
+			
+			
+			<div class="box">
+					<div class="title">
+						<span>What Needs To Be Done?</span>
+					</div>
+					<input type="text" v-model="msg" class='form-control inputText' 
+						@keydown.enter="add();" placeholder="what needs to be done?"/>
+						<div class="wrap">
+							<ul>
+								<li v-for="item in msgList" track-by="$index">
+									<div class="check">
+										<img src="img/check.png"/>
+									</div>
+									<span id="content">{{item.content}}</span>
+									<div class='del-btn' data-toggle='modal'
+							 		data-target='#layer' @click="currentId=$index;">X</div>
+									<span class="time">{{item.time | date}}</span>
+								</li>
+							</ul>
+						</div>
+						<div class='btn-danger btn-sm remove-all' @click="removeAll();">remove</div>
+			</div>
+			
+			<!--模态框-->
+			<div role='dialog' class='modal fade' id='layer' data-index='{{currentId}}'>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" data-dismiss='modal'>&times;</button>
+							<h4 class="modal-title" v-model='title'>确定删除吗？</h4>
+						</div>
+						<div class="modal-body">
+							<button class="btn-primary text-right" v-on:click='remove(currentId)' 
+								data-dismiss='modal'>确定</button>
+							<button class="btn-danger text-right" data-dismiss='modal'>取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+	</body>
+	<script type="text/javascript">
+			//日期过滤器
+			Vue.filter('date', function (value) {//value为13位的时间戳
+		            function addZero(m) {
+		                return m < 10 ? '0' + m : m
+		            }
+		            let time = new Date(parseInt(value));
+		            let year = time.getFullYear();
+		            let month = time.getMonth() + 1;
+		            let day = time.getDate();
+					let hour=time.getHours();
+					let minute=time.getMinutes();
+					let second=time.getSeconds();
+		            return year + '.' + addZero(month) + '.' + addZero(day)+' '
+		            +addZero(hour)+':'+addZero(minute)+':'+addZero(second);
+		        });	
+		        
+			var vm=new Vue({
+				el:'body',
+				data:{
+					checked:true,
+					//当前事项的id
+					currentId:'',
+					msg:'',
+					msgList:[]
+				},
+				methods:{
+					//初始化
+					init:function(){
+						this.$http.get('msg.json',{},{
+							emulateJson:true
+						}).then(function(json){
+							this.msgList=JSON.parse(json.bodyText).list;
+						},function(){
+							alert('失败！');
+						});
+					},
+					//添加一条
+					add:function(){
+						if(this.msg==''){
+							alert('Please type something~');
+							return;
+						}
+						this.msgList.push({
+							content:this.msg,
+							time:new Date().getTime()
+						});
+						this.msg='';//清空
+					},
+					//删除一条
+					remove:function(curId){
+						this.msgList.splice(curId,1);
+					}
+				}
+			});
+			vm.init();//初始化
+			
+			//Jquery
+			$(function(){
+				$('.wrap').on('mouseover','li',function(){
+					$(this).find('.del-btn').css('visibility','visible');
+				});
+				$('.wrap').on('mouseleave','li',function(){
+					$(this).find('.del-btn').css('visibility','hidden');
+				});
+				
+				$('.wrap').on('click','.check',function(){
+					$(this).parent().toggleClass('crossed').find('img').toggle();
+				});
+				
+				$('.remove-all').click(function(){
+					$('.wrap ul>li').each(function(index,val){
+						if($(val).hasClass('crossed')){
+							$(val).remove();
+						}
+					});
+				});
+			});			
+	</script>
+</html>
