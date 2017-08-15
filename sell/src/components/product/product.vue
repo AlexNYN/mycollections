@@ -32,15 +32,28 @@
                   <span class='old' v-show='food.oldPrice'>¥{{food.oldPrice}}</span>
                 </div>
               </div>
+
+               <!-- 加入购物车小球组件 -->
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food='food'></cartcontrol>
+              </div> 
+
             </li>
           </ul>
         </li>
       </ul>
     </div>
+
+    <!-- 购物车组件 -->
+    <cart :deliveryPrice='seller.deliveryPrice' :minPrice='seller.minPrice' :selectedFood='selectedFood'></cart>
+
   </div>
 </template>
 
 <script>
+
+import cartcontrol from '../cartcontrol/cartcontrol'
+import cart from '@/components/cart/cart'
 import BScroll from 'better-scroll'
 import axios from 'axios'
 
@@ -48,6 +61,13 @@ const ERR_OK=0
 
 export default {
   name: 'product',
+  props:{
+    seller:{}
+  },
+  components:{ 
+    cart,
+    cartcontrol 
+  },
   data () {
     return {
       product:[],
@@ -66,10 +86,19 @@ export default {
       }
 
       return 0
+    },
+    // 选中的食品数组
+    selectedFood() {
+      let foodSelected = []
+      this.product.forEach((product)=>{
+        product.foods.forEach((food)=>{
+          if(food.count){ // 如果当前商品有food.count这个属性
+             foodSelected.push(food)
+          }
+        })
+      })
+      return foodSelected
     }
-  },
-  updated() {
-
   },
   created(){
       this.classMap = ['decrease','discount','special','invoice','guarantee']
@@ -77,14 +106,11 @@ export default {
         if(res.data.errno === ERR_OK){
           this.product = res.data.data
         }
+        this.$nextTick(()=>{
+          this._initScroll()
+          this._calculateHeight(); 
+        })
       }).catch(err=>{})
-
-      this.$nextTick(()=>{
-      })
-      setTimeout(()=>{ 
-        this._initScroll()
-        this._calculateHeight(); 
-      },20)
       console.log('created')
   },
   mounted() {
@@ -105,6 +131,7 @@ export default {
         click:true
       })
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper,{
+        click:true,
         probeType:3
       })
 
@@ -114,12 +141,9 @@ export default {
       })
 
     },
-    _calculateHeight() {
-
-      console.log('arr:'+[1,2,3].length)
-      console.log('_calculateHeight!')      
+    _calculateHeight() {     
       //let foodList = Array.from(document.querySelectorAll('.food-list-hook'))
-      let foodList = document.getElementsByClassName('food-list-hook')      
+      let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')       
       let height = 0
       this.listHeight.push(height)
       console.log(foodList.length) // 打印0
@@ -138,7 +162,6 @@ export default {
       } 
       let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')  
       this.foodsScroll.scrollToElement(foodList[index],300)    
-      console.log(index)
     }
   },
 }
@@ -207,6 +230,7 @@ export default {
         margin:18px
         border-1px(rgba(7,17,27,0.1))
         padding-bottom:18px
+        position:relative
         &:last-child
           border-none()
           margin-bottom:0
@@ -230,7 +254,7 @@ export default {
             line-height:12px  
           .extra
             .count
-                margin-right:12px
+                margin-right:8px
           .price
             font-weight:700
             line-height:24px
@@ -241,5 +265,9 @@ export default {
             .old
               text-decoration:line-through
               font-size:10px
-              color:rgb(147,153,159)                   
+              color:rgb(147,153,159)  
+        .cartcontrol-wrapper
+          position:absolute
+          bottom:10px
+          right:0                 
 </style>

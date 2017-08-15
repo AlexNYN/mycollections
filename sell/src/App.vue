@@ -7,7 +7,7 @@
     <tab></tab>
 
     <!--router-view切换-->
-    <router-view></router-view>
+    <router-view :seller='seller'></router-view>
   </div>
 </template>
 

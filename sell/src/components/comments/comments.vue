@@ -7,6 +7,9 @@
 <script>
 export default {
   name: 'comments',
+  props:{
+    seller:{}
+  },
   data () {
     return {
       
