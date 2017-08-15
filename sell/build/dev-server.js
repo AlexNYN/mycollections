@@ -32,7 +32,7 @@ var seller = appData.seller
 var goods = appData.goods
 var ratings = appData.ratings
 
-var apiRoute=express.Router()
+var apiRoute = express.Router()
 
 //定义API接口，分别为商家，商品，评价
 apiRoute.get('/seller',(req,res,next)=>{
