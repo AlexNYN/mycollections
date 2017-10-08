@@ -62,7 +62,10 @@ const ERR_OK=0
 export default {
   name: 'product',
   props:{
-    seller:{}
+    seller:{
+      type:Object,
+      required:true
+    }
   },
   components:{ 
     cart,
@@ -116,12 +119,6 @@ export default {
   mounted() {
       
      let foodList = document.getElementsByClassName('food-list-hook')   
-     console.log(typeof foodList)
-      this.$nextTick(()=>{
-        //this._initScroll();
-        //this._calculateHeight();  
-
-      })
       console.log('mounted') 
   },
   methods:{

@@ -12,7 +12,7 @@ const LENGTH=5;
 const CLS_ON='on'
 const CLS_HALF='half'
 const CLS_OFF='of'
-
+      
 export default {
   props:{
       size:{
@@ -27,11 +27,11 @@ export default {
           return 'star-'+this.size
       },
       itemClasses() {
-          let result = []
+          let result = [] 
           let score = Math.floor(this.score*2)/2 // 向下取整
-          let hasDecimal = score % 1==0 //是否有小数
+          let hasDecimal = score % 2==0 //是否有小数
           let integer = Math.floor(score) // 有几个星星的个数
-
+          
           for(let i=0;i<integer;i++){
               result.push(CLS_ON)
           }
@@ -68,8 +68,8 @@ export default {
             height:20px
             margin-right:22px
             background-size:20px 20px
-            &.last-child
-              margin-right:0
+            &:nth-child(5)
+              margin-right:0 !important
             &.on
               bg-image('star48_on')
             &.half
@@ -80,10 +80,10 @@ export default {
           .star-item
             width:15px
             height:15px
-            margin-right:16px
+            margin-right:6px
             background-size:15px 15px
-            &.last-child
-              margin-right:0
+            &:nth-child(5)
+              margin-right:0 !important
             &.on
               bg-image('star36_on')
             &.half
@@ -96,8 +96,8 @@ export default {
             height:10px
             margin-right:3px
             background-size:10px 10px
-            &.last-child
-              margin-right:0
+            &:nth-child(5)
+              margin-right:0 !important
             &.on
               bg-image('star24_on')
             &.half

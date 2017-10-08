@@ -37,7 +37,8 @@ export default {
   //组件生成之后请求商家数据
   created(){
     axios.get('/api/seller').then(res=>{
-      if(res.data.errno === ERR_OK){
+      let { errno } = res.data
+      if(errno === ERR_OK){
         this.seller = res.data.data
       }
     }).catch(err=>{})
